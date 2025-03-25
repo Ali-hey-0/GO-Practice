@@ -2,7 +2,8 @@
 
 <div align="center">
 
-<img src="https://i.imgur.com/OXrGXlJ.png" alt="RSS Aggregator Logo" width="400" height="auto">
+<!-- Replace with local path when deploying -->
+<p><i>Image: RSS Feed icon with connected devices</i></p>
 
 <h3>A modern RSS feed aggregator API built with Go</h3>
 
@@ -13,11 +14,11 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)](https://docker.com)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
-[Features](#features) • 
-[Quick Start](#getting-started) • 
-[Usage](#usage-examples) • 
-[API Docs](#api-documentation) • 
-[Deployment](#deployment)
+[Features](#-features) • 
+[Quick Start](#-getting-started) • 
+[Usage](#-usage-examples) • 
+[API Docs](#-api-documentation) • 
+[Deployment](#-deployment)
 
 </div>
 
@@ -59,33 +60,26 @@
 
 ## 📋 Table of Contents
 
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-  - [Installation with Docker](#installation-with-docker)
-  - [Local Development Setup](#local-development-setup)
-- [Usage Examples](#usage-examples)
-  - [Creating a User](#creating-a-user)
-  - [Managing Feeds](#managing-feeds)
-  - [Following Feeds](#following-feeds)
-  - [Retrieving Posts](#retrieving-posts)
-- [API Documentation](#api-documentation)
-  - [Authentication](#authentication)
-  - [Endpoint Reference](#endpoint-reference)
-- [Database Schema](#database-schema)
-- [Architecture](#architecture)
-- [Docker Configuration](#docker-configuration)
-- [Deployment](#deployment)
-- [Performance Optimization](#performance-optimization)
-- [Security Considerations](#security-considerations)
-- [Configuration](#configuration)
-- [Troubleshooting](#troubleshooting)
-- [FAQ](#faq)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
+- [✨ Overview](#-overview)
+- [✅ Features](#-features)
+- [🛠️ Technology Stack](#️-technology-stack)
+- [🗂️ Project Structure](#️-project-structure)
+- [📋 Prerequisites](#-prerequisites)
+- [🚀 Getting Started](#-getting-started)
+- [💻 Usage Examples](#-usage-examples)
+- [📖 API Documentation](#-api-documentation)
+- [💾 Database Schema](#-database-schema)
+- [🏛️ Architecture](#️-architecture)
+- [🐳 Docker Configuration](#-docker-configuration)
+- [🚀 Deployment](#-deployment)
+- [⚡ Performance Optimization](#-performance-optimization)
+- [🔒 Security Considerations](#-security-considerations)
+- [⚙️ Configuration](#️-configuration)
+- [🔍 Troubleshooting](#-troubleshooting)
+- [❓ FAQ](#-faq)
+- [👥 Contributing](#-contributing)
+- [📄 License](#-license)
+- [🙏 Acknowledgments](#-acknowledgments)
 
 ## ✅ Features
 
@@ -217,9 +211,7 @@ rssagg/
 ### Installation with Docker
 
 <div align="center">
-
-![Docker Setup](https://i.imgur.com/qnlKVcJ.png)
-
+<p><i>Diagram: Docker container architecture showing app and database containers</i></p>
 </div>
 
 The quickest way to get started is using Docker Compose:
@@ -232,13 +224,36 @@ The quickest way to get started is using Docker Compose:
 
 2. **Start the application**:
    ```bash
+   # Build and start containers in detached mode
    docker-compose up -d
+   
+   # To rebuild containers (after code changes)
+   docker-compose up -d --build
    ```
 
 3. **Verify the installation**:
    ```bash
+   # Check container status
+   docker-compose ps
+   
+   # Check application logs
+   docker-compose logs -f app
+   
+   # Test the API
    curl http://localhost:5050/v1/healthz
    # Response: {"status":"ok"}
+   ```
+
+4. **Stop and cleanup**:
+   ```bash
+   # Stop containers
+   docker-compose down
+   
+   # Remove volumes (database data)
+   docker-compose down -v
+   
+   # Remove images as well
+   docker-compose down -v --rmi all
    ```
 
 Everything is now set up and ready to use! The API is available at `http://localhost:5050`.
@@ -636,9 +651,7 @@ All authenticated endpoints will return:
 ## 💾 Database Schema
 
 <div align="center">
-
-![Database Schema](https://i.imgur.com/fsJeXJJ.png)
-
+<p><i>Diagram: Database schema showing users, feeds, feed_follows, and posts tables and their relationships</i></p>
 </div>
 
 <details>
@@ -689,9 +702,7 @@ All authenticated endpoints will return:
 ## 🏛️ Architecture
 
 <div align="center">
-
-![Architecture Diagram](https://i.imgur.com/lnXPLn1.png)
-
+<p><i>Diagram: System architecture showing HTTP Server, Business Logic, Database, and Feed Scraper components</i></p>
 </div>
 
 <details>
@@ -779,12 +790,39 @@ volumes:
 ```
 </details>
 
+### Docker Command Reference
+
+Here are some useful Docker commands for managing the application:
+
+```bash
+# View container logs
+docker-compose logs -f app
+docker-compose logs -f db
+
+# Get a shell inside the containers
+docker-compose exec app sh
+docker-compose exec db psql -U postgres
+
+# Check the PostgreSQL database
+docker-compose exec db psql -U postgres -c "SELECT * FROM users LIMIT 5;"
+
+# Monitor container resource usage
+docker stats
+
+# Restart a specific service
+docker-compose restart app
+
+# Update a container after changing the code
+docker-compose up -d --build app
+
+# View mapped ports
+docker-compose port app 5050
+```
+
 ## 🚀 Deployment
 
 <div align="center">
-
-![Deployment](https://i.imgur.com/9MJRbBV.png)
-
+<p><i>Diagram: Production deployment architecture with load balancer, multiple app instances, and database</i></p>
 </div>
 
 <details>
@@ -889,10 +927,13 @@ LOG_LEVEL=info
 **Check database connection:**
 ```bash
 # Verify PostgreSQL is running
-pg_isready -h localhost -p 5432
+docker-compose ps db
 
-# Check connection string
-echo $DB_URL
+# Check database logs
+docker-compose logs db
+
+# Verify connection from app container
+docker-compose exec app wget -O- db:5432
 ```
 
 ### Authentication Failures
@@ -909,6 +950,22 @@ Authorization: ApiKey YOUR_API_KEY
 curl -H "Authorization: ApiKey $API_KEY" \
   http://localhost:5050/v1/feed_follows
 ```
+
+### Docker Issues
+
+**Container won't start:**
+```bash
+# Check for container errors
+docker-compose logs app
+
+# Check if ports are already in use
+netstat -tuln | grep 5050
+netstat -tuln | grep 5432
+
+# Rebuild containers from scratch
+docker-compose down -v
+docker-compose up -d --build
+```
 </details>
 
 ## ❓ FAQ
@@ -924,6 +981,12 @@ A: Yes, the `/v1/feeds` endpoint returns all feeds.
 
 **Q: Is there a limit to feeds I can follow?**  
 A: No built-in limit, but consider performance with large numbers.
+
+**Q: How do I backup my database when using Docker?**  
+A: Run: `docker-compose exec db pg_dump -U postgres postgres > backup.sql`
+
+**Q: How do I run migrations when updating the application?**  
+A: Migrations run automatically when the container starts if you mount the schema directory.
 </details>
 
 ## 👥 Contributing
