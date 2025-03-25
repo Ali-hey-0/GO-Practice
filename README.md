@@ -219,7 +219,7 @@ The quickest way to get started is using Docker Compose:
 1. **Clone the repository**:
    ```bash
    git clone <repository-url>
-   cd rssagg
+   cd repository
    ```
 
 2. **Start the application**:
