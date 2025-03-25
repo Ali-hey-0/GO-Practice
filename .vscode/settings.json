@@ -1,0 +1,16 @@
+{
+    "dbcode.connections": [],
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "sql",
+            "group": "schema",
+            "password": "2000",
+            "username": "postgres",
+            "database": "postgres"
+        }
+    ]
+}
